@@ -13,18 +13,18 @@ public:
 	MIDI_read(std::string path);
 	~MIDI_read();
 
-	typedef struct {//ƒwƒbƒ_ƒtƒH[ƒ}ƒbƒg
-		uint16_t MIDI_format;//MIDI‚ÌƒtƒH[ƒ}ƒbƒg
-		uint16_t MIDI_track;//ƒgƒ‰ƒbƒN”
-		uint16_t resolution;//•ª‰ğ”\(4•ª‰¹•„1ŒÂ“–‚½‚èŠÔ’PˆÊH
+	typedef struct {//ãƒ˜ãƒƒãƒ€ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+		uint16_t MIDI_format;//MIDIã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+		uint16_t MIDI_track;//ãƒˆãƒ©ãƒƒã‚¯æ•°
+		uint16_t resolution;//åˆ†è§£èƒ½(4åˆ†éŸ³ç¬¦1å€‹å½“ãŸã‚Šæ™‚é–“å˜ä½ï¼Ÿ
 	}MIDI_heard;
 
-	MIDI_heard* heard_data;//ƒwƒbƒ_‚ğ“ü‚ê‚é
-	std::vector<MIDI_track*> track_data;//ƒgƒ‰ƒbƒNƒf[ƒ^‚ğ“ü‚ê‚é
+	MIDI_heard* heard_data;//ãƒ˜ãƒƒãƒ€ã‚’å…¥ã‚Œã‚‹
+	std::vector<MIDI_track*> track_data;//ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã‚’å…¥ã‚Œã‚‹
 
 private:
 
-	std::vector<uint8_t> file_data;//ƒf[ƒ^‚ğ’u‚­”z—ñ
+	std::vector<uint8_t> file_data;//ãƒ‡ãƒ¼ã‚¿ã‚’ç½®ãé…åˆ—
 
 	template<typename TYPE> TYPE endian_change(TYPE* data);
 	template<typename TYPE> void endian_change_overwrite(TYPE* data);
@@ -33,85 +33,85 @@ private:
 };
 
 
-_inline MIDI_read::MIDI_read(std::string path)
+inline MIDI_read::MIDI_read(std::string path)
 {
 
-	std::uintmax_t file_size = std::filesystem::file_size(path);//ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ğ“Ç‚İ‚Æ‚è
+	std::uintmax_t file_size = std::filesystem::file_size(path);//ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‚’èª­ã¿ã¨ã‚Š
 	file_data.resize(file_size);
 
-	size_t file_place = 0;//ƒtƒ@ƒCƒ‹‚ÌêŠ‚ğ‹L˜^
+	size_t file_place = 0;//ãƒ•ã‚¡ã‚¤ãƒ«ã®å ´æ‰€ã‚’è¨˜éŒ²
 
 	{
 		std::ifstream ifs(path, std::ios::binary);
 		if (!ifs) {
-			ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½B", -1)
+			ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚", -1)
 		}
 
-		ifs.read(reinterpret_cast<char*>(&file_data[0]), file_size);//ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İ
+		ifs.read(reinterpret_cast<char*>(&file_data[0]), file_size);//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿
 
 	}
 
 
 
-	if (memcmp(&file_data[file_place], "MThd", 4)) {//ƒwƒbƒ_‚Ì"MThd"‚ª‚ ‚é‚©Šm”F
-		ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ÌƒtƒH[ƒ}ƒbƒg‚ªˆá‚¢‚Ü‚·", 0)
+	if (memcmp(&file_data[file_place], "MThd", 4)) {//ãƒ˜ãƒƒãƒ€ã®"MThd"ãŒã‚ã‚‹ã‹ç¢ºèª
+		ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãŒé•ã„ã¾ã™", 0)
 	}
 
-	file_place += 4;//ƒwƒbƒ_‚Ì"MYhd"(4byte)
+	file_place += 4;//ãƒ˜ãƒƒãƒ€ã®"MYhd"(4byte)
 
-	heard_data = (MIDI_read::MIDI_heard*)&file_data[file_place + 4];//ƒf[ƒ^‚Ìæ“ªƒ|ƒCƒ“ƒ^‚ğ“n‚·
+	heard_data = (MIDI_read::MIDI_heard*)&file_data[file_place + 4];//ãƒ‡ãƒ¼ã‚¿ã®å…ˆé ­ãƒã‚¤ãƒ³ã‚¿ã‚’æ¸¡ã™
 
 	for (int i = 0; i < MIDI_read::endian_change((uint32_t*)&file_data[file_place]) / sizeof(uint16_t); i++) {
-		MIDI_read::endian_change_overwrite((uint16_t*)&file_data[file_place + 4 + (i * sizeof(uint16_t))]);//ƒGƒ“ƒfƒBƒAƒ“‚ğ•ÏŠ·
+		MIDI_read::endian_change_overwrite((uint16_t*)&file_data[file_place + 4 + (i * sizeof(uint16_t))]);//ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ã‚’å¤‰æ›
 	}
 
-	file_place += (4 + MIDI_read::endian_change((uint32_t*)&file_data[4]));//ƒwƒbƒ_‚Ì—Ìˆæ•ªi‚ß‚é
+	file_place += (4 + MIDI_read::endian_change((uint32_t*)&file_data[4]));//ãƒ˜ãƒƒãƒ€ã®é ˜åŸŸåˆ†é€²ã‚ã‚‹
 
-	if ((heard_data->MIDI_format == 0) && (heard_data->MIDI_track == 1)) {//ƒtƒH[ƒ}ƒbƒg0
-
-	}
-	else if ((heard_data->MIDI_format == 1) && (heard_data->MIDI_track != 0)) {//ƒtƒH[ƒ}ƒbƒg1
+	if ((heard_data->MIDI_format == 0) && (heard_data->MIDI_track == 1)) {//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ0
 
 	}
-	else if (heard_data->MIDI_format == 2) {//ƒtƒH[ƒ}ƒbƒg2(”ñ‘Î‰)
-		ERROR_PRINT("ƒtƒH[ƒ}ƒbƒg2‚Í”ñ‘Î‰‚Å‚·B", 0)
+	else if ((heard_data->MIDI_format == 1) && (heard_data->MIDI_track != 0)) {//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ1
+
 	}
-	else {//ƒGƒ‰[
-		ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ª”j‘¹‚µ‚Ä‚¢‚Ü‚·B", 0)
+	else if (heard_data->MIDI_format == 2) {//ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ2(éå¯¾å¿œ)
+		ERROR_PRINT("ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ2ã¯éå¯¾å¿œã§ã™ã€‚", 0)
+	}
+	else {//ã‚¨ãƒ©ãƒ¼
+		ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ãŒç ´æã—ã¦ã„ã¾ã™ã€‚", 0)
 	}
 
 
 
 
-	track_data.resize(heard_data->MIDI_track);//ƒgƒ‰ƒbƒNƒf[ƒ^‚ğ“ü‚ê‚éƒƒ‚ƒŠ‚ğŠm•Û
+	track_data.resize(heard_data->MIDI_track);//ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã‚’å…¥ã‚Œã‚‹ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿
 
 	for (int i = 0; i < heard_data->MIDI_track; i++) {
-		if (memcmp(&file_data[file_place], "MTrk", 4)) {//ƒwƒbƒ_‚Ì"MThd"‚ª‚ ‚é‚©Šm”F
-			ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ÌƒtƒH[ƒ}ƒbƒg‚ªˆá‚¢‚Ü‚·", 0)
+		if (memcmp(&file_data[file_place], "MTrk", 4)) {//ãƒ˜ãƒƒãƒ€ã®"MThd"ãŒã‚ã‚‹ã‹ç¢ºèª
+			ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãŒé•ã„ã¾ã™", 0)
 		}
 
-		file_place += 4;//ƒgƒ‰ƒbƒN‚Ì"MYrk"(4byte)
+		file_place += 4;//ãƒˆãƒ©ãƒƒã‚¯ã®"MYrk"(4byte)
 
-		track_data[i] = new MIDI_track(MIDI_read::endian_change((uint32_t*)&file_data[file_place]), &file_data[file_place + 4]);//ƒgƒ‰ƒbƒNƒf[ƒ^‚ğƒNƒ‰ƒX‚É“n‚·
+		track_data[i] = new MIDI_track(MIDI_read::endian_change((uint32_t*)&file_data[file_place]), &file_data[file_place + 4]);//ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã‚’ã‚¯ãƒ©ã‚¹ã«æ¸¡ã™
 
-		file_place += (MIDI_read::endian_change((uint32_t*)&file_data[file_place]) + 4);//ƒgƒ‰ƒbƒNƒf[ƒ^‚ÌƒTƒCƒY‚Ô‚ñi‚ß‚é
+		file_place += (MIDI_read::endian_change((uint32_t*)&file_data[file_place]) + 4);//ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã¶ã‚“é€²ã‚ã‚‹
 	}
 
 
 }
 
-_inline MIDI_read::~MIDI_read()
+inline MIDI_read::~MIDI_read()
 {
 
 }
 
 /// <summary>
-/// ƒGƒ“ƒfƒBƒAƒ“•ÏŠ·
+/// ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³å¤‰æ›
 /// </summary>
 /// <typeparam name="TYPE"></typeparam>
-/// <param name="data">•ÏŠ·‚·‚é•Ï”‚Ìƒ|ƒCƒ“ƒ^(•ÏŠ·æ‚ÌŒ^‚Ìƒ|ƒCƒ“ƒ^‚ÅƒLƒƒƒXƒg‚·‚é‚±‚Æ)</param>
+/// <param name="data">å¤‰æ›ã™ã‚‹å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿(å¤‰æ›å…ˆã®å‹ã®ãƒã‚¤ãƒ³ã‚¿ã§ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹ã“ã¨)</param>
 /// <returns></returns>
-template<typename TYPE> _inline TYPE MIDI_read::endian_change(TYPE* data) {
+template<typename TYPE> inline TYPE MIDI_read::endian_change(TYPE* data) {
 	TYPE num = 0;
 	uint8_t* p_buf = (uint8_t*)data;
 	for (int i = 0; i < sizeof(TYPE); i++) {
@@ -121,12 +121,12 @@ template<typename TYPE> _inline TYPE MIDI_read::endian_change(TYPE* data) {
 }
 
 /// <summary>
-/// ƒGƒ“ƒfƒBƒAƒ“•ÏŠ·‚µ‚Äã‘‚«
+/// ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³å¤‰æ›ã—ã¦ä¸Šæ›¸ã
 /// </summary>
 /// <typeparam name="TYPE"></typeparam>
-/// <param name="data">•ÏŠ·‚·‚é•Ï”‚Ìƒ|ƒCƒ“ƒ^(•ÏŠ·æ‚ÌŒ^‚Ìƒ|ƒCƒ“ƒ^‚ÅƒLƒƒƒXƒg‚·‚é‚±‚Æ)</param>
+/// <param name="data">å¤‰æ›ã™ã‚‹å¤‰æ•°ã®ãƒã‚¤ãƒ³ã‚¿(å¤‰æ›å…ˆã®å‹ã®ãƒã‚¤ãƒ³ã‚¿ã§ã‚­ãƒ£ã‚¹ãƒˆã™ã‚‹ã“ã¨)</param>
 /// <returns></returns>
-template<typename TYPE> _inline void MIDI_read::endian_change_overwrite(TYPE* data) {
+template<typename TYPE> inline void MIDI_read::endian_change_overwrite(TYPE* data) {
 	TYPE num = 0;
 	uint8_t* p_buf = (uint8_t*)data;
 	for (int i = 0; i < sizeof(TYPE); i++) {

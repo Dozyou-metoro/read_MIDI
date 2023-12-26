@@ -23,7 +23,7 @@ public:
 
 	MIDI_track::track_data get_track_data(uint16_t data_no);
 private:
-	uint8_t* p_track_data = nullptr;//ƒgƒ‰ƒbƒNƒf[ƒ^‚Ìn’[ƒ|ƒCƒ“ƒ^
+	uint8_t* p_track_data = nullptr;//ãƒˆãƒ©ãƒƒã‚¯ãƒ‡ãƒ¼ã‚¿ã®å§‹ç«¯ãƒã‚¤ãƒ³ã‚¿
 	size_t data_size = 0;
 
 	uint16_t status_count = 1;
@@ -36,19 +36,19 @@ private:
 
 
 
-_inline MIDI_track::MIDI_track(size_t size, uint8_t* data)
+inline MIDI_track::MIDI_track(size_t size, uint8_t* data)
 {
-	assert(data);//nullptrƒ`ƒFƒbƒN
+	assert(data);//nullptrãƒã‚§ãƒƒã‚¯
 	p_track_data = data;
 	data_size = size;
 }
 
-_inline MIDI_track::~MIDI_track()
+inline MIDI_track::~MIDI_track()
 {
 
 }
 
-_inline MIDI_track::track_data MIDI_track::get_track_data(uint16_t data_no) {
+inline MIDI_track::track_data MIDI_track::get_track_data(uint16_t data_no) {
 	size_t count = 0;
 	size_t return_data_num = 0;
 
@@ -72,70 +72,70 @@ _inline MIDI_track::track_data MIDI_track::get_track_data(uint16_t data_no) {
 		}
 
 		startcount_before = count;
-		count += return_time(&p_track_data[count], &return_buf.time);//ŠÔ‚ğ“Ç‚İ‚İ
+		count += return_time(&p_track_data[count], &return_buf.time);//æ™‚é–“ã‚’èª­ã¿è¾¼ã¿
 		return_data_num = count;
 		status_count++;
 
 		switch (p_track_data[count] & 0xf0) {
-		case 0x80://ƒm[ƒgƒIƒt 8n kk vv ƒ`ƒƒƒ“ƒlƒ‹”Ô†n‚Ìƒm[ƒg”Ô†kk‚Ì‰¹‚ğ~‚ß‚éB
+		case 0x80://ãƒãƒ¼ãƒˆã‚ªãƒ• 8n kk vv ãƒãƒ£ãƒ³ãƒãƒ«ç•ªå·nã®ãƒãƒ¼ãƒˆç•ªå·kkã®éŸ³ã‚’æ­¢ã‚ã‚‹ã€‚
 			count += 3;
 			return_buf.data_size = 3;
 
 			break;
 
-		case 0x90://ƒm[ƒgƒIƒ“ 9n kk vv ƒ`ƒƒƒ“ƒlƒ‹n‚Åƒm[ƒg”Ô†kk‚Ì‰¹‚ğƒxƒƒVƒeƒBvv‚Å–Â‚ç‚·B
+		case 0x90://ãƒãƒ¼ãƒˆã‚ªãƒ³ 9n kk vv ãƒãƒ£ãƒ³ãƒãƒ«nã§ãƒãƒ¼ãƒˆç•ªå·kkã®éŸ³ã‚’ãƒ™ãƒ­ã‚·ãƒ†ã‚£vvã§é³´ã‚‰ã™ã€‚
 			count += 3;
 			return_buf.data_size = 3;
 			break;
 
-		case 0xA0://ƒ|ƒŠƒtƒHƒjƒbƒNƒL[ƒvƒŒƒbƒVƒƒ[ An kk vv ƒ`ƒƒƒ“ƒlƒ‹n‚Å”­‰¹’†‚Ìƒm[ƒg”Ô†kk‚Ì‰¹‚É‘Î‚µAƒxƒƒVƒeƒBvv‚Ì ƒvƒŒƒbƒVƒƒ[î•ñ‚ğ—^‚¦‚éB
+		case 0xA0://ãƒãƒªãƒ•ã‚©ãƒ‹ãƒƒã‚¯ã‚­ãƒ¼ãƒ—ãƒ¬ãƒƒã‚·ãƒ£ãƒ¼ An kk vv ãƒãƒ£ãƒ³ãƒãƒ«nã§ç™ºéŸ³ä¸­ã®ãƒãƒ¼ãƒˆç•ªå·kkã®éŸ³ã«å¯¾ã—ã€ãƒ™ãƒ­ã‚·ãƒ†ã‚£vvã® ãƒ—ãƒ¬ãƒƒã‚·ãƒ£ãƒ¼æƒ…å ±ã‚’ä¸ãˆã‚‹ã€‚
 			count += 3;
 			return_buf.data_size = 3;
 			break;
 
-		case 0xB0://ƒRƒ“ƒgƒ[ƒ‹ƒ`ƒFƒ“ƒW Bn cc vv ƒ`ƒƒƒ“ƒlƒ‹n‚ÅAƒRƒ“ƒgƒ[ƒ‰ƒiƒ“ƒo[cc‚ÉA’lvv‚ğ‘—‚éB
+		case 0xB0://ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒã‚§ãƒ³ã‚¸ Bn cc vv ãƒãƒ£ãƒ³ãƒãƒ«nã§ã€ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒŠãƒ³ãƒãƒ¼ccã«ã€å€¤vvã‚’é€ã‚‹ã€‚
 			count += 3;
 			return_buf.data_size = 3;
 			break;
 
-		case 0xC0://ƒvƒƒOƒ‰ƒ€ƒ`ƒFƒ“ƒW Cn pp  ƒ`ƒƒƒ“ƒlƒ‹n‚ÅAƒvƒƒOƒ‰ƒ€(‰¹F)‚ğpp‚É•ÏX‚·‚éB
+		case 0xC0://ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒã‚§ãƒ³ã‚¸ Cn pp  ãƒãƒ£ãƒ³ãƒãƒ«nã§ã€ãƒ—ãƒ­ã‚°ãƒ©ãƒ (éŸ³è‰²)ã‚’ppã«å¤‰æ›´ã™ã‚‹ã€‚
 			count += 2;
 			return_buf.data_size = 2;
 			break;
 
-		case 0xD0://ƒ`ƒƒƒ“ƒlƒ‹ƒvƒŒƒbƒVƒƒ[ Dn vv ƒ`ƒƒƒ“ƒlƒ‹n‚É‘Î‚µAƒvƒŒƒbƒVƒƒ[î•ñvv‚ğ‘—M‚·‚éB
+		case 0xD0://ãƒãƒ£ãƒ³ãƒãƒ«ãƒ—ãƒ¬ãƒƒã‚·ãƒ£ãƒ¼ Dn vv ãƒãƒ£ãƒ³ãƒãƒ«nã«å¯¾ã—ã€ãƒ—ãƒ¬ãƒƒã‚·ãƒ£ãƒ¼æƒ…å ±vvã‚’é€ä¿¡ã™ã‚‹ã€‚
 			count += 2;
 			return_buf.data_size = 2;
 			break;
 
-		case 0xE0://ƒsƒbƒ`ƒxƒ“ƒh En mm ll ƒ`ƒƒƒ“ƒlƒ‹n‚É‘Î‚µAƒsƒbƒ`ƒxƒ“ƒh’lllmm‚ğ‘—M‚·‚éBƒŠƒgƒ‹ƒGƒ“ƒfƒBƒAƒ“‚È‚Ì‚Å’ˆÓB
+		case 0xE0://ãƒ”ãƒƒãƒãƒ™ãƒ³ãƒ‰ En mm ll ãƒãƒ£ãƒ³ãƒãƒ«nã«å¯¾ã—ã€ãƒ”ãƒƒãƒãƒ™ãƒ³ãƒ‰å€¤llmmã‚’é€ä¿¡ã™ã‚‹ã€‚ãƒªãƒˆãƒ«ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ãªã®ã§æ³¨æ„ã€‚
 			count += 3;
 			return_buf.data_size = 3;
 			break;
 
-		case 0xF0://“Áê‚Èw¦
+		case 0xF0://ç‰¹æ®ŠãªæŒ‡ç¤º
 
 			switch (p_track_data[count]) {
-			case 0xF0://F0‚Ån‚Ü‚ésysexƒCƒxƒ“ƒg
+			case 0xF0://F0ã§å§‹ã¾ã‚‹sysexã‚¤ãƒ™ãƒ³ãƒˆ
 				return_buf.data_size = (p_track_data[count + 1] + 2);
 				count += (p_track_data[count + 1] + 2);
 
 				break;
 
-			case 0xF7://F7‚Ån‚Ü‚ésysexƒCƒxƒ“ƒg
+			case 0xF7://F7ã§å§‹ã¾ã‚‹sysexã‚¤ãƒ™ãƒ³ãƒˆ
 				return_buf.data_size = (p_track_data[count + 1] + 2);
 				count += (p_track_data[count + 1] + 2);
 
 				break;
 
-			case 0xFF://ƒƒ^ƒCƒxƒ“ƒg
+			case 0xFF://ãƒ¡ã‚¿ã‚¤ãƒ™ãƒ³ãƒˆ
 				return_buf.data_size = (p_track_data[count + 2] + 3);
 				count += (p_track_data[count + 2] + 3);
 
 				break;
 
 			default:
-				ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ª”j‘¹‚µ‚Ä‚¢‚Ü‚·B", 0);
+				ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ãŒç ´æã—ã¦ã„ã¾ã™ã€‚", 0);
 				break;
 			}
 			break;
@@ -143,7 +143,7 @@ _inline MIDI_track::track_data MIDI_track::get_track_data(uint16_t data_no) {
 		default:
 			printf("\n\n%#x\n", p_track_data[count]);
 			uint8_t a = p_track_data[count];
-			ERROR_PRINT("ƒtƒ@ƒCƒ‹‚ª”j‘¹‚µ‚Ä‚¢‚Ü‚·B", 0);
+			ERROR_PRINT("ãƒ•ã‚¡ã‚¤ãƒ«ãŒç ´æã—ã¦ã„ã¾ã™ã€‚", 0);
 			break;
 		}
 
@@ -154,7 +154,7 @@ _inline MIDI_track::track_data MIDI_track::get_track_data(uint16_t data_no) {
 
 }
 
-_inline uint8_t MIDI_track::return_time(uint8_t* data, size_t* time_num) {
+inline uint8_t MIDI_track::return_time(uint8_t* data, size_t* time_num) {
 	uint8_t timedata_size = 0;
 	uint8_t data_count = 0;
 
@@ -164,8 +164,8 @@ _inline uint8_t MIDI_track::return_time(uint8_t* data, size_t* time_num) {
 	do {
 		timedata_size++;
 		*time_num = *time_num << 7;
-		*time_num += (data[timedata_size - 1] & 0x7f);//ãˆÊ1ƒrƒbƒg‚Í‰Â•Ï’·‚ÌŠÇ—g—p‚·‚é‚½‚ßœŠO
-	} while ((data[timedata_size - 1] & 0x80) != 0);//ãˆÊ1ƒrƒbƒg‚ª1‚È‚çŒp‘±
+		*time_num += (data[timedata_size - 1] & 0x7f);//ä¸Šä½1ãƒ“ãƒƒãƒˆã¯å¯å¤‰é•·ã®ç®¡ç†ä½¿ç”¨ã™ã‚‹ãŸã‚é™¤å¤–
+	} while ((data[timedata_size - 1] & 0x80) != 0);//ä¸Šä½1ãƒ“ãƒƒãƒˆãŒ1ãªã‚‰ç¶™ç¶š
 
 	return timedata_size;
 

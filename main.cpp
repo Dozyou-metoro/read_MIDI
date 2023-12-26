@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include"MIDI_read.hpp"
+#include"read_MIDI/MIDI_read.hpp"
 
 int main(int argc,char** argv) {
 	MIDI_read midi(argv[1]);
@@ -9,7 +9,7 @@ int main(int argc,char** argv) {
 			if (midi.track_data[k]->get_track_data(j).data_size == 0) {
 				break;
 			}
-			printf("TIMEF%3d@", (int)midi.track_data[k]->get_track_data(j).time);
+			printf("TIME:%3d  ", (int)midi.track_data[k]->get_track_data(j).time);
 			for (int i = 0; i < midi.track_data[k]->get_track_data(j).data_size; i++) {
 
 
